@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:farmeasy/components/products.dart';
 void main() {
   runApp(FormeasyApp());
 }
@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
     if (_selectedState != null) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => CustomerRetailerPage()),
+        MaterialPageRoute(builder: (context) => ProductPage()),
       );
     }
   }
