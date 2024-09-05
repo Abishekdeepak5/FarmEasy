@@ -5,10 +5,10 @@ import 'package:farmeasy/model/stateIN.dart';
 
 
 void main() {
-  runApp(FormeasyApp());
+  runApp(FarmeasyApp());
 }
 
-class FormeasyApp extends StatelessWidget {
+class FarmeasyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Welcome to Formeasy'),
+        title: Text('Welcome to Farmeasy'),
       ),
       body: states.isEmpty
           ? Center(child: CircularProgressIndicator())
