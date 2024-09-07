@@ -4,6 +4,8 @@ import 'package:farmeasy/components/products.dart';
 import 'package:farmeasy/model/stateIN.dart';
 
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 void main() {
   runApp(FarmeasyApp());
 }

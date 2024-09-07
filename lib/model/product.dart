@@ -6,9 +6,9 @@ class Product {
   final String variety;
   final String grade;
   final String arrivalDate;
-  final double minPrice;
-  final double maxPrice;
-  final double modalPrice;
+  double minPrice;
+  double maxPrice;
+  double modalPrice;
 
   Product({
     required this.state,

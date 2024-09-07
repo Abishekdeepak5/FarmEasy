@@ -1,6 +1,8 @@
+import 'package:farmeasy/service/productservice.dart';
 import 'package:flutter/material.dart';
-import 'package:farmeasy/api/govdata.dart';
+import 'package:farmeasy/service/api/govdata.dart';
 import 'package:farmeasy/model/product.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ProductPage extends StatefulWidget {
   @override
@@ -13,7 +15,9 @@ class _ProductPageState extends State<ProductPage> {
   @override
   void initState() {
     super.initState();
-    futureProducts = ApiService().getProducts();
+    // futureProducts = ApiService().getProducts();
+    // ProductService productService=new ProductService();
+    futureProducts=ProductService().getFrequentProduct();
   }
 
   @override
@@ -32,7 +36,7 @@ class _ProductPageState extends State<ProductPage> {
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(products[index].commodity),
-                  subtitle: Text('Market: ${products[index].market}, Price: ${products[index].modalPrice}'),
+                  subtitle: Text('Avg: ₹ ${products[index].modalPrice}(${products[index].minPrice}-${products[index].maxPrice})'),
                 );
               },
             );
