@@ -1,14 +1,18 @@
+import 'package:farmeasy/api/govdata.dart';
 import 'package:flutter/material.dart';
 import 'package:farmeasy/components/products.dart';
+import 'package:farmeasy/model/stateIN.dart';
+
+
 void main() {
-  runApp(FormeasyApp());
+  runApp(FarmeasyApp());
 }
 
-class FormeasyApp extends StatelessWidget {
+class FarmeasyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Formeasy',
+      title: 'Farmeasy',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -22,10 +26,13 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>{
   String? _selectedState;
+  String? _selectedDistrict;
+  List<StateIN> states = [];
+  List<String> districts = [];
 
-  final List<String> _indianStates = [
+  /*final List<String> _indianStates = [
     'Andhra Pradesh',
     'Arunachal Pradesh',
     'Assam',
@@ -54,58 +61,111 @@ class _HomePageState extends State<HomePage> {
     'Uttar Pradesh',
     'Uttarakhand',
     'West Bengal',
-  ];
+  ];*/
 
+  // Navigate to the next page
   void _navigateToNextPage() {
-    if (_selectedState != null) {
+    if (_selectedState != null && _selectedDistrict != null) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => ProductPage()),
       );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please select both state and district')),
+      );
     }
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    _loadStates();
+  }
+
+  void _loadStates() async{
+    states = await ApiService().loadStatesAndDistricts();
+    setState(() {});
+  }
+
+  // Update districts when a state is selected
+  void _onStateChanged(String? selectedState) {
+    setState(() {
+      _selectedState = selectedState;
+      _selectedDistrict = null; // Reset district selection
+      districts = states
+          .firstWhere((state) => state.name == selectedState)
+          .districts; // Update the district list based on selected state
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Welcome to Formeasy'),
+        title: Text('Welcome to Farmeasy'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Select your state:',
-              style: TextStyle(fontSize: 18),
+      body: states.isEmpty
+          ? Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Select your state:',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(height: 10),
+                  // State Dropdown
+                  DropdownButton<String>(
+                    value: _selectedState,
+                    hint: Text('Choose a state'),
+                    isExpanded: true,
+                    items: states.map((StateIN state) {
+                      return DropdownMenuItem<String>(
+                        value: state.name,
+                        child: Text(state.name),
+                      );
+                    }).toList(),
+                    onChanged: _onStateChanged,
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Select your district:',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(height: 10),
+                  // District Dropdown (enabled only when a state is selected)
+                  DropdownButton<String>(
+                    value: _selectedDistrict,
+                    hint: Text('Choose a district'),
+                    isExpanded: true,
+                    items: districts.isNotEmpty
+                        ? districts.map((String district) {
+                            return DropdownMenuItem<String>(
+                              value: district,
+                              child: Text(district),
+                            );
+                          }).toList()
+                        : [], // Show empty list if no districts available
+                    onChanged: districts.isNotEmpty
+                        ? (newValue) {
+                            setState(() {
+                              _selectedDistrict = newValue;
+                            });
+                          }
+                        : null, // Disable if no districts available
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _navigateToNextPage,
+                    child: Text('Next'),
+                  ),
+                ],
+              ),
             ),
-            SizedBox(height: 10),
-            DropdownButton<String>(
-              value: _selectedState,
-              hint: Text('Choose a state'),
-              isExpanded: true,
-              items: _indianStates.map((String state) {
-                return DropdownMenuItem<String>(
-                  value: state,
-                  child: Text(state),
-                );
-              }).toList(),
-              onChanged: (newValue) {
-                setState(() {
-                  _selectedState = newValue;
-                });
-              },
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _navigateToNextPage,
-              child: Text('Next'),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
