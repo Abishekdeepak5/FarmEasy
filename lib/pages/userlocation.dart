@@ -15,7 +15,7 @@ class CheckLocation extends StatelessWidget {
           if (snapshot.data as bool) {
             return ProductPage(); // Navigate to HomeScreen if data exists
           } else {
-            return UserLocatiion(); // Show InputScreen if no data
+            return UserLocation(); // Show InputScreen if no data
           }
         } else {
           return Scaffold(
@@ -35,12 +35,12 @@ class CheckLocation extends StatelessWidget {
 }
 
 
-class UserLocatiion extends StatefulWidget {
+class UserLocation extends StatefulWidget {
   @override
-  _UserLocatiionState createState() => _UserLocatiionState();
+  _UserLocationState createState() => _UserLocationState();
 }
 
-class _UserLocatiionState extends State<UserLocatiion>{
+class _UserLocationState extends State<UserLocation>{
   String? _selectedState;
   String? _selectedDistrict;
   List<StateIN> states = [];

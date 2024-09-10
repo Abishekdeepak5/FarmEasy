@@ -12,7 +12,7 @@ class ApiService {
   // Fetch only the Products part from API response
   Future<List<Product>> getProducts() async {
     Location location=await helper.getLocation();
-    String url=apiUrl+"&filters%5Bstate.keyword%5D=${location.state}&filters%5Bdistrict%5D=${location.district}";
+    String url=apiUrl+"&filters%5Bstate.keyword%5D=${Uri.encodeFull(location.state)}&filters%5Bdistrict%5D=${Uri.encodeFull(location.district)}";
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
@@ -30,7 +30,9 @@ class ApiService {
   }
 
   Future<List<Product>> getCommodity(String commodity) async {
-    String url=apiUrl+"&filters%5Bcommodity%5D=${commodity}";
+    Location location=await helper.getLocation();
+    String url=apiUrl+"&filters%5Bstate.keyword%5D=${Uri.encodeFull(location.state)}&filters%5Bdistrict%5D=${Uri.encodeFull(location.district)}";
+    url+="&filters%5Bcommodity%5D=${Uri.encodeFull(commodity)}";
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
