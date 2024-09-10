@@ -15,3 +15,8 @@ class StateIN {
     );
   }
 }
+class Location{
+  String state;
+  String district;
+  Location({required this.state, required this.district});
+}

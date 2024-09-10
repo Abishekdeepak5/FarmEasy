@@ -1,3 +1,4 @@
+import 'package:farmeasy/pages/userlocation.dart';
 import 'package:farmeasy/service/productservice.dart';
 import 'package:flutter/material.dart';
 import 'package:farmeasy/service/api/govdata.dart';
@@ -31,7 +32,15 @@ class _ProductPageState extends State<ProductPage> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<Product> products = snapshot.data!;
-            return ListView.builder(
+            return 
+            Column(children: <Widget>[
+            ElevatedButton(onPressed: ()=>{
+                 Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserLocatiion()),
+                  )
+            }, child: Text("Edit Location")),
+            ListView.builder(
               itemCount: products.length,
               itemBuilder: (context, index) {
                 return ListTile(
@@ -39,7 +48,8 @@ class _ProductPageState extends State<ProductPage> {
                   subtitle: Text('Avg: ₹ ${products[index].modalPrice}(${products[index].minPrice}-${products[index].maxPrice})'),
                 );
               },
-            );
+            )
+            ],);
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
