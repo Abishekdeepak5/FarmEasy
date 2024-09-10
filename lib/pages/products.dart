@@ -1,4 +1,5 @@
 import 'package:farmeasy/model/stateIN.dart';
+import 'package:farmeasy/pages/auth/signup.dart';
 import 'package:farmeasy/pages/userlocation.dart';
 import 'package:farmeasy/service/helper/methods.dart';
 import 'package:farmeasy/service/productservice.dart';
@@ -38,7 +39,8 @@ class _ProductPageState extends State<ProductPage> {
         children: [
          Expanded(child:
           AveragePrice(futureProducts: futureProducts)
-         )
+         ),
+Expanded(child:         SignUpScreen()),
         ],
       )
     );
